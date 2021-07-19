@@ -27,7 +27,7 @@ namespace dotnet_updater
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-
+                var t = "mo";
                 if (IsCellular)
                 {
                     _logger.LogInformation("checking if there is a new update", DateTimeOffset.Now);
