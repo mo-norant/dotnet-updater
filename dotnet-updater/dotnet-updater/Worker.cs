@@ -15,7 +15,7 @@ namespace dotnet_updater
         private readonly ILogger<Worker> _logger;
 
         private const bool IsCellular = true;
-        private const int OneMinute = 1000 * 8;
+        private const int OneMinute = 1000 * 15;
 
 
         public Worker(ILogger<Worker> logger)
@@ -34,11 +34,16 @@ namespace dotnet_updater
                     string logMessage = "";
                     using (var repo = new Repository("../../"))
                     {
-                        var remote = repo.Network.Remotes["origin"];
-                        var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
-                        Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
+                        var branch = repo.Branches.FirstOrDefault(x => x.FriendlyName == "main");
+                        if (branch.TrackingDetails.AheadBy != null)
+                        {
+                            foreach (var commit in repo.Commits.Take(branch.TrackingDetails.AheadBy.Value))
+                            {
+                                _logger.LogInformation(commit.Id.ToString());
+                            }
+                        }
                     }
-                    Console.WriteLine(logMessage);
+                    _logger.LogInformation(logMessage);
                 }
 
                 await Task.Delay(OneMinute, stoppingToken);
