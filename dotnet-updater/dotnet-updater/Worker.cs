@@ -49,10 +49,10 @@ namespace dotnet_updater
                             RepositoryStatus status = repo.RetrieveStatus();
                             if (status.IsDirty)
                             {
-                                _logger.LogInformation("New updates available");
+                                _logger.LogInformation("{time} > New updates available", DateTimeOffset.Now);
                             }else
                             {
-                                _logger.LogInformation("No new updates available");
+                                _logger.LogInformation("{time} > No new updates available", DateTimeOffset.Now);
                             }
 
                         }
@@ -60,8 +60,6 @@ namespace dotnet_updater
 
                 }
 
-
-                _logger.LogInformation("OVC Update tool check at: {time}", DateTimeOffset.Now);
                 await Task.Delay(OneMinute, stoppingToken);
             }
         }
