@@ -31,34 +31,42 @@ namespace dotnet_updater
                 if (IsCellular)
                 {
                     _logger.LogInformation("checking if there is a new update", DateTimeOffset.Now);
-
+                    string logMessage = "";
                     using (var repo = new Repository("../../"))
                     {
-                        var branch = repo.Branches["main"];
-
-                        if (branch != null)
-                        {
-                            FetchOptions options = new FetchOptions();
-                            options.CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) =>
-                              new UsernamePasswordCredentials()
-                              {
-                                  Username = "mo-norant",
-                                  Password = "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"
-                              });
-
-
-                            var t = repo.Branches["main"].IsCurrentRepositoryHead;
-                            
-                            if (t)
-                            {
-                                _logger.LogInformation("{time} > New updates available", DateTimeOffset.Now);
-                            }else
-                            {
-                                _logger.LogInformation("{time} > No new updates available", DateTimeOffset.Now);
-                            }
-
-                        }
+                        var remote = repo.Network.Remotes["origin"];
+                        var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                        Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
                     }
+
+                    //using (var repo = new Repository("../../"))
+                    //{
+                    //    var branch = repo.Branches["main"];
+
+                    //    if (branch != null)
+                    //    {
+                    //        FetchOptions options = new FetchOptions();
+                    //        options.CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) =>
+                    //          new UsernamePasswordCredentials()
+                    //          {
+                    //              Username = "mo-norant",
+                    //              Password = "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"
+                    //          });
+
+                    //        string logMessage = "";
+                          
+                    //        var t = repo.Branches["main"].IsCurrentRepositoryHead;
+                            
+                    //        if (t)
+                    //        {
+                    //            _logger.LogInformation("{time} > New updates available", DateTimeOffset.Now);
+                    //        }else
+                    //        {
+                    //            _logger.LogInformation("{time} > No new updates available", DateTimeOffset.Now);
+                    //        }
+
+                    //    }
+                    //}
 
                 }
 
