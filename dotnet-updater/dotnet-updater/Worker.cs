@@ -32,9 +32,9 @@ namespace dotnet_updater
                 {
                     _logger.LogInformation("checking if there is a new update", DateTimeOffset.Now);
 
-                    using (var repo = new Repository("."))
+                    using (var repo = new Repository("../../"))
                     {
-                        var branch = repo.Branches["production"];
+                        var branch = repo.Branches["main"];
 
                         if (branch != null)
                         {
@@ -43,8 +43,8 @@ namespace dotnet_updater
                             options.CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) =>
                               new UsernamePasswordCredentials()
                               {
-                                  Username = "USERNAME",
-                                  Password = "PASSWORD"
+                                  Username = "mo-norant",
+                                  Password = "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"
                               });
 
                             foreach (Remote remote in repo.Network.Remotes)
