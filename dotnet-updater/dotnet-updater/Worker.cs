@@ -30,23 +30,19 @@ namespace dotnet_updater
 
                 if (IsCellular)
                 {
-                    _logger.LogInformation("checking if there is a new update", DateTimeOffset.Now);
+                    _logger.LogInformation("{time}: checking if there is a new update", DateTimeOffset.Now);
 
+                    string logMessage = "";
                     using (var repo = new Repository("../../"))
                     {
-                        var branch = repo.Branches.FirstOrDefault(x => x.FriendlyName == "main");
+                        var remote = repo.Network.Remotes["origin"];
+                        var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                        Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
+                        Console.WriteLine(logMessage);
 
-                        if (branch.TrackingDetails.AheadBy != null)
-                        {
-                            _logger.LogInformation("No incoming commits {t}", branch.TrackingDetails.AheadBy.Value);
-
-                        } else
-                        {
-                            _logger.LogInformation("No incoming commits");
-                        }
                     }
 
-                  
+
 
                 }
 
