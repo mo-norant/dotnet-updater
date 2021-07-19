@@ -38,7 +38,6 @@ namespace dotnet_updater
 
                         if (branch != null)
                         {
-                            string logMessage = "";
                             FetchOptions options = new FetchOptions();
                             options.CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) =>
                               new UsernamePasswordCredentials()
@@ -47,10 +46,15 @@ namespace dotnet_updater
                                   Password = "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"
                               });
 
-                            foreach (var item in repo.RetrieveStatus(new StatusOptions()))
+                            RepositoryStatus status = repo.RetrieveStatus();
+                            if (status.IsDirty)
                             {
-                                Console.WriteLine(item.FilePath);
+                                _logger.LogInformation("New updates available");
+                            }else
+                            {
+                                _logger.LogInformation("No new updates available");
                             }
+
                         }
                     }
 
