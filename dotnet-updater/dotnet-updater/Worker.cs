@@ -56,7 +56,6 @@ namespace dotnet_updater
                             {
                                 _logger.LogInformation("{time} > No new updates available", DateTimeOffset.Now);
                             }
-                            string mo = "new";
 
                         }
                     }
