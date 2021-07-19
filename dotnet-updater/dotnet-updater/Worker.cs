@@ -40,9 +40,6 @@ namespace dotnet_updater
                         Console.WriteLine(logMessage);
 
                     }
-
-
-
                 }
 
                 await Task.Delay(OneMinute, stoppingToken);
