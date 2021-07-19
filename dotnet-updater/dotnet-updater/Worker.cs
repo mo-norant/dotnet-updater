@@ -37,7 +37,10 @@ namespace dotnet_updater
                         var remote = repo.Network.Remotes["origin"];
                         var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
                         Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
-                        Console.WriteLine(logMessage);
+                        foreach (var item in repo.RetrieveStatus(new StatusOptions()))
+                        {
+                            Console.WriteLine(item.FilePath);
+                        }
 
                     }
                 }
