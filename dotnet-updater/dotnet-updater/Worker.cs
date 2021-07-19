@@ -15,7 +15,7 @@ namespace dotnet_updater
         private readonly ILogger<Worker> _logger;
 
         private const bool IsCellular = true;
-        private const int OneMinute = 1000 * 60;
+        private const int OneMinute = 1000 * 10;
 
 
         public Worker(ILogger<Worker> logger)
@@ -53,8 +53,14 @@ namespace dotnet_updater
                                 Commands.Fetch(repo, remote.Name, refSpecs, options, logMessage);
                             }
 
-                            Console.WriteLine(logMessage);
-
+                            if(logMessage == "")
+                            {
+                                Console.WriteLine("No new update");
+                            }
+                            else
+                            {
+                                Console.WriteLine(logMessage);
+                            }
                         }
                     }
 
