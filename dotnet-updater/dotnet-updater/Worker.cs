@@ -40,14 +40,12 @@ namespace dotnet_updater
                         {
                             _logger.LogInformation("No incoming commits {t}", branch.TrackingDetails.AheadBy.Value);
 
-                        } else
+                        }
+                        else
                         {
                             _logger.LogInformation("No incoming commits");
                         }
                     }
-
-                  
-
                 }
 
                 await Task.Delay(OneMinute, stoppingToken);
