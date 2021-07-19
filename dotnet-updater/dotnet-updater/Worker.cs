@@ -47,19 +47,9 @@ namespace dotnet_updater
                                   Password = "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"
                               });
 
-                            foreach (Remote remote in repo.Network.Remotes)
+                            foreach (var item in repo.RetrieveStatus(new StatusOptions()))
                             {
-                                IEnumerable<string> refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
-                                Commands.Fetch(repo, remote.Name, refSpecs, options, logMessage);
-                            }
-
-                            if(logMessage == "")
-                            {
-                                Console.WriteLine("No new update");
-                            }
-                            else
-                            {
-                                Console.WriteLine(logMessage);
+                                Console.WriteLine(item.FilePath);
                             }
                         }
                     }
