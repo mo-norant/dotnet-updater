@@ -46,8 +46,10 @@ namespace dotnet_updater
                                   Password = "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"
                               });
 
-                            RepositoryStatus status = repo.RetrieveStatus();
-                            if (status.IsDirty)
+
+                            var t = repo.Branches["main"].IsCurrentRepositoryHead;
+                            
+                            if (t)
                             {
                                 _logger.LogInformation("{time} > New updates available", DateTimeOffset.Now);
                             }else
