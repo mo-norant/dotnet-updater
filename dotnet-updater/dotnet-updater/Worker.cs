@@ -15,7 +15,7 @@ namespace dotnet_updater
         private readonly ILogger<Worker> _logger;
 
         private const bool IsCellular = true;
-        private const int OneMinute = 1000 * 10;
+        private const int OneMinute = 1000 * 15;
 
 
         public Worker(ILogger<Worker> logger)
