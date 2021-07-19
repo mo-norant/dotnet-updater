@@ -15,7 +15,7 @@ namespace dotnet_updater
         private readonly ILogger<Worker> _logger;
 
         private const bool IsCellular = true;
-        private const int OneMinute = 1000 * 15;
+        private const int OneMinute = 1000 * 8;
 
 
         public Worker(ILogger<Worker> logger)
@@ -37,12 +37,8 @@ namespace dotnet_updater
                         var remote = repo.Network.Remotes["origin"];
                         var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
                         Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
-                        foreach (var item in repo.RetrieveStatus(new StatusOptions()))
-                        {
-                            Console.WriteLine(item.FilePath);
-                        }
-
                     }
+                    Console.WriteLine(logMessage);
                 }
 
                 await Task.Delay(OneMinute, stoppingToken);
