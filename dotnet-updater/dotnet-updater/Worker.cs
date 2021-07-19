@@ -37,6 +37,8 @@ namespace dotnet_updater
                         var remote = repo.Network.Remotes["origin"];
                         var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
                         Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
+
+                        var t = "";
                     }
 
                     //using (var repo = new Repository("../../"))
