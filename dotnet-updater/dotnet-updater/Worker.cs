@@ -2,6 +2,7 @@ using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Shell.NET;
 using System;
 using System.Linq;
 using System.Threading;
@@ -11,7 +12,7 @@ namespace dotnet_updater
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<Worker> logger;
 
         private const bool IsCellular = true;
         private const bool CanUpdate = true;
@@ -20,7 +21,7 @@ namespace dotnet_updater
 
         public Worker(ILogger<Worker> logger)
         {
-            _logger = logger;
+            this.logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,15 +32,11 @@ namespace dotnet_updater
                 {
                     using (var repo = new Repository("../../"))
                     {
-                        
                         PullOptions options = new PullOptions();
                         options.FetchOptions = new FetchOptions();
                         
                         var signature = new Signature(
                             new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
-
-
-                        
 
                         // Pull
                         Commands.Pull(repo, signature, options);
@@ -48,8 +45,13 @@ namespace dotnet_updater
                         if(!string.Equals(commit.Sha, latestCommit))
                         {
                             latestCommit = commit.Sha;
-                            _logger.LogInformation("Latest commit: {sha}", latestCommit);
-                            _logger.LogInformation("Message: {message}", commit.MessageShort);
+                            logger.LogInformation("Latest commit: {sha}", latestCommit);
+                            logger.LogInformation("Message: {message}", commit.MessageShort);
+
+                            var bash = new Bash();
+                            logger.LogInformation(bash.Command("sudo kill -9 $(sudo lsof -t -i:5000)").Output);
+                            logger.LogInformation(bash.Command("sudo kill -9 $(sudo lsof -t -i:5001)").Output);
+                            logger.LogInformation(bash.Command("dotnet run /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app").Output);
 
                         }
 
