@@ -14,6 +14,7 @@ namespace dotnet_updater
         private readonly ILogger<Worker> _logger;
 
         private const bool IsCellular = true;
+        private const bool CanUpdate = true;
         private const int fiveSeconds = 1000 * 5;
         private string latestCommit = "";
 
@@ -26,7 +27,7 @@ namespace dotnet_updater
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (IsCellular)
+                if (IsCellular && CanUpdate)
                 {
                     using (var repo = new Repository("../../"))
                     {
@@ -47,8 +48,8 @@ namespace dotnet_updater
                         if(!string.Equals(commit.Sha, latestCommit))
                         {
                             latestCommit = commit.Sha;
-                            _logger.LogInformation("latest commit: {sha}", latestCommit);
-                            _logger.LogInformation("message: {message}", commit.MessageShort);
+                            _logger.LogInformation("Latest commit: {sha}", latestCommit);
+                            _logger.LogInformation("Message: {message}", commit.MessageShort);
 
                         }
 
