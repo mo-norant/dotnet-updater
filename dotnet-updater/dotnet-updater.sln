@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-updater", "dotnet-updater\dotnet-updater.csproj", "{82DB5012-6333-4039-A212-C6491138CF38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-updater", "dotnet-updater\dotnet-updater.csproj", "{82DB5012-6333-4039-A212-C6491138CF38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-update-app", "dotnet-update-app\dotnet-update-app.csproj", "{0D0D16F3-DAD2-46B7-A786-9E2283DE6941}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-update-app", "dotnet-update-app\dotnet-update-app.csproj", "{0D0D16F3-DAD2-46B7-A786-9E2283DE6941}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
