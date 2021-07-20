@@ -34,7 +34,7 @@ namespace dotnet_updater
                     {
                         PullOptions options = new PullOptions();
                         options.FetchOptions = new FetchOptions();
-                        
+
                         var signature = new Signature(
                             new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
 
@@ -42,13 +42,13 @@ namespace dotnet_updater
                         Commands.Pull(repo, signature, options);
                         Commit commit = repo.Commits.FirstOrDefault();
 
-                        if(!string.Equals(commit.Sha, latestCommit))
+                        if (!string.Equals(commit.Sha, latestCommit))
                         {
                             latestCommit = commit.Sha;
                             logger.LogInformation("Latest commit: {sha}", latestCommit);
                             logger.LogInformation("Message: {message}", commit.MessageShort);
 
-                            var bash = new Bash();
+                            //var bash = new Bash();
                             //bash.Command("sudo kill -9 $(sudo lsof -t -i:5000)");
                             //bash.Command("sudo kill -9 $(sudo lsof -t -i:5001)");
                             //logger.LogInformation(bash.Command("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app").Output);
