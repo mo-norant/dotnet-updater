@@ -3,7 +3,6 @@ using LibGit2Sharp.Handlers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,18 +28,27 @@ namespace dotnet_updater
             {
                 if (IsCellular)
                 {
-                    _logger.LogInformation("{time}: checking if there is a new update", DateTimeOffset.Now);
-
-                    string logMessage = "";
                     using (var repo = new Repository("../../"))
                     {
-                        var remote = repo.Network.Remotes["origin"];
-                        var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
-                        Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
-                    }
-                    Console.WriteLine(logMessage);
-                }
+                        
+                        PullOptions options = new PullOptions();
+                        options.FetchOptions = new FetchOptions();
+                        //options.FetchOptions.CredentialsProvider = new CredentialsHandler(
+                        //    (url, usernameFromUrl, types) =>
+                        //        new UsernamePasswordCredentials()
+                        //        {
+                        //            Username = "mo.bouzim@live.be",
+                        //            Password = ""
+                        //        });
 
+                        // User information to create a merge commit
+                        var signature = new Signature(
+                            new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
+
+                        // Pull
+                        Commands.Pull(repo, signature, options);
+                    }
+                }
                 await Task.Delay(OneMinute, stoppingToken);
             }
         }
