@@ -48,6 +48,8 @@ namespace dotnet_updater
                         {
                             latestCommit = commit.Sha;
                             _logger.LogInformation("latest commit: {sha}", latestCommit);
+                            _logger.LogInformation("message: {message}", commit.MessageShort);
+
                         }
 
                     }

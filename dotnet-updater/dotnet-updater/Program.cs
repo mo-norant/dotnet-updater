@@ -1,9 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+
 
 namespace dotnet_updater
 {
@@ -19,6 +17,15 @@ namespace dotnet_updater
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
-                });
+                    services.AddLogging(opt =>
+                     {
+                         opt.AddConsole(c =>
+                         {
+                             c.TimestampFormat = "[HH:mm:ss] ";
+                         });
+                     });
+
+                })
+            ;
     }
 }
