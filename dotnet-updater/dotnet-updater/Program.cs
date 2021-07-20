@@ -21,7 +21,7 @@ namespace dotnet_updater
                      {
                          opt.AddConsole(c =>
                          {
-                             c.TimestampFormat = "[HH:mm:ss] ";
+                             opt.AddSimpleConsole(options => options.TimestampFormat = "[HH:mm:ss] ");
                          });
                      });
 
