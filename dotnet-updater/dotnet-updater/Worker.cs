@@ -49,9 +49,9 @@ namespace dotnet_updater
                             logger.LogInformation("Message: {message}", commit.MessageShort);
 
                             var bash = new Bash();
-                            bash.Command("sudo kill -9 $(sudo lsof -t -i:5000)");
-                            bash.Command("sudo kill -9 $(sudo lsof -t -i:5001)");
-                            logger.LogInformation(bash.Command("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app").Output);
+                            //bash.Command("sudo kill -9 $(sudo lsof -t -i:5000)");
+                            //bash.Command("sudo kill -9 $(sudo lsof -t -i:5001)");
+                            //logger.LogInformation(bash.Command("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app").Output);
 
                         }
 
