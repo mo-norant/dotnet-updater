@@ -15,7 +15,7 @@ namespace dotnet_updater
 
         private const bool IsCellular = true;
         private const int OneMinute = 1000 * 15;
-
+        private string latestCommit = "";
 
         public Worker(ILogger<Worker> logger)
         {
@@ -33,20 +33,23 @@ namespace dotnet_updater
                         
                         PullOptions options = new PullOptions();
                         options.FetchOptions = new FetchOptions();
-                        //options.FetchOptions.CredentialsProvider = new CredentialsHandler(
-                        //    (url, usernameFromUrl, types) =>
-                        //        new UsernamePasswordCredentials()
-                        //        {
-                        //            Username = "mo.bouzim@live.be",
-                        //            Password = ""
-                        //        });
-
-                        // User information to create a merge commit
+                        
                         var signature = new Signature(
                             new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
 
+
+                        
+
                         // Pull
                         Commands.Pull(repo, signature, options);
+                        Commit commit = repo.Commits.FirstOrDefault();
+
+                        if(!string.Equals(commit.Sha, latestCommit))
+                        {
+                            latestCommit = commit.Sha;
+                            _logger.LogInformation("new commit: {sha}", latestCommit);
+                        }
+
                     }
                 }
                 await Task.Delay(OneMinute, stoppingToken);
