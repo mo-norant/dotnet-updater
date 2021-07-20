@@ -47,7 +47,7 @@ namespace dotnet_updater
                         if(!string.Equals(commit.Sha, latestCommit))
                         {
                             latestCommit = commit.Sha;
-                            _logger.LogInformation("new commit: {sha}", latestCommit);
+                            _logger.LogInformation("latest commit: {sha}", latestCommit);
                         }
 
                     }
