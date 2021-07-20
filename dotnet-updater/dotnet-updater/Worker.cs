@@ -14,7 +14,7 @@ namespace dotnet_updater
         private readonly ILogger<Worker> _logger;
 
         private const bool IsCellular = true;
-        private const int OneMinute = 1000 * 15;
+        private const int fiveSeconds = 1000 * 5;
         private string latestCommit = "";
 
         public Worker(ILogger<Worker> logger)
@@ -52,7 +52,7 @@ namespace dotnet_updater
 
                     }
                 }
-                await Task.Delay(OneMinute, stoppingToken);
+                await Task.Delay(fiveSeconds, stoppingToken);
             }
         }
     }
