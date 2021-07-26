@@ -63,12 +63,12 @@ namespace dotnet_updater
                 logger.LogInformation("restarting services...");
                 logger.LogInformation("pid: {pid}", pid);
                 Bash($"sudo kill -9 {pid}");
-                Bash("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app");
+                Bash("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app", true);
                 logger.LogInformation("Service restarted.");
             }
         }
 
-        public string Bash(string cmd)
+        public string Bash(string cmd, bool UseShellExecute = false)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");
             var process = new Process()
@@ -78,7 +78,7 @@ namespace dotnet_updater
                     FileName = "/bin/bash",
                     Arguments = $"-c \"{escapedArgs}\"",
                     RedirectStandardOutput = true,
-                    UseShellExecute = false,
+                    UseShellExecute = UseShellExecute,
                     CreateNoWindow = true,
                 }
             };
