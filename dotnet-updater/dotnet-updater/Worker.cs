@@ -39,9 +39,10 @@ namespace dotnet_updater
                     {
                         logger.LogInformation("Changes detected. Applying changes...");
                         Bash($"git pull -f");
-                        logger.LogInformation("Changes applied...");
+                        logger.LogInformation("Changes applied.");
                         logger.LogInformation("restarting services...");
-
+                        RestartApplication();
+                        logger.LogInformation("Service restarted.");
                     }
                 }
                 await Task.Delay(updatePeriod, stoppingToken);
@@ -51,6 +52,12 @@ namespace dotnet_updater
         public bool AnyBranchChanges()
         {
             return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
+        }
+
+        private void RestartApplication()
+        {
+            Bash("kill -9 $(sudo lsof -t -i:5001)");
+            Bash("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app");
         }
 
         public string Bash(string cmd)
