@@ -37,8 +37,8 @@ namespace dotnet_updater
                 if (IsCellular && CanUpdate)
                 {
 
-                    Bash($"git fetch {remoteBranch}");
-                    if (!Bash($"git diff --name-only {localBranch} {remoteBranch} ").Any())
+                    Bash($"git fetch  {remote} {localBranch}");
+                    if (!Bash($"git diff --name-only {localBranch} {remoteBranch}").Any())
                     {
                         Console.WriteLine("No changes");
                     }
