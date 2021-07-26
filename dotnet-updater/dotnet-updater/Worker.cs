@@ -62,7 +62,7 @@ namespace dotnet_updater
             {
                 logger.LogInformation("restarting services...");
                 logger.LogInformation("pid: {pid}", pid);
-                Bash($"sudo kill -9 pid");
+                Bash($"sudo kill -9 {pid}");
                 Bash("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app");
                 logger.LogInformation("Service restarted.");
             }
