@@ -1,6 +1,7 @@
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -17,6 +18,7 @@ namespace dotnet_updater
         private const string localBranch = "main";
         private const string remoteBranch = "origin/main";
         private const string remote = "origin";
+        private const int applicationPort = 5001;
 
         public Worker(ILogger<Worker> logger)
         {
@@ -27,11 +29,12 @@ namespace dotnet_updater
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                logger.LogInformation("Check new update at: {date}", DateTime.Now.ToString("dddd, dd MMMM yyyy HH: mm:ss"));
                 if (IsCellular && CanUpdate)
                 {
 
                     Bash($"git fetch  {remote} {localBranch}");
-                    if (!AnyBranchChanges())
+                    if (AnyBranchChanges())
                     {
                         logger.LogInformation("No changes");
                     }
@@ -40,9 +43,7 @@ namespace dotnet_updater
                         logger.LogInformation("Changes detected. Applying changes...");
                         Bash($"git pull -f");
                         logger.LogInformation("Changes applied.");
-                        logger.LogInformation("restarting services...");
                         RestartApplication();
-                        logger.LogInformation("Service restarted.");
                     }
                 }
                 await Task.Delay(updatePeriod, stoppingToken);
@@ -56,8 +57,15 @@ namespace dotnet_updater
 
         private void RestartApplication()
         {
-            Bash("kill -9 $(sudo lsof -t -i:5001)");
-            Bash("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app");
+            int.TryParse(Bash($"sudo lsof -t -i:{applicationPort}"), out int pid);
+            if (pid != 0)
+            {
+                logger.LogInformation("restarting services...");
+                logger.LogInformation("pid: {pid}", pid);
+                Bash($"sudo kill -9 pid");
+                Bash("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app");
+                logger.LogInformation("Service restarted.");
+            }
         }
 
         public string Bash(string cmd)
