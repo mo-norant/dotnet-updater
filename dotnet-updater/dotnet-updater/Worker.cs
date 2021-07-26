@@ -1,8 +1,8 @@
-using LibGit2Sharp;
-using LibGit2Sharp.Handlers;
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Shell.NET;
+using Shell.NET.Util;
 using System;
 using System.Linq;
 using System.Threading;
@@ -19,6 +19,11 @@ namespace dotnet_updater
         private const int fiveSeconds = 1000 * 5;
         private string latestCommit = "";
 
+        private const string localBranch = "main";
+        private const string remoteBranch = "origin/main";
+        private const string remote = "origin";
+        private Bash bash = new Bash();
+
         public Worker(ILogger<Worker> logger)
         {
             this.logger = logger;
@@ -30,35 +35,23 @@ namespace dotnet_updater
             {
                 if (IsCellular && CanUpdate)
                 {
-                    using (var repo = new Repository("../../"))
-                    {
-                        PullOptions options = new PullOptions();
-                        options.FetchOptions = new FetchOptions();
 
-                        var signature = new Signature(
-                            new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
+                    RunCommand($"git fetch {remote} {localBranch}");
 
-                        // Pull
-                        Commands.Pull(repo, signature, options);
-                        Commit commit = repo.Commits.FirstOrDefault();
-
-                        if (!string.Equals(commit.Sha, latestCommit))
-                        {
-                            latestCommit = commit.Sha;
-                            logger.LogInformation("Latest commit: {sha}", latestCommit);
-                            logger.LogInformation("Message: {message}", commit.MessageShort);
-
-                            //var bash = new Bash();
-                            //bash.Command("sudo kill -9 $(sudo lsof -t -i:5000)");
-                            //bash.Command("sudo kill -9 $(sudo lsof -t -i:5001)");
-                            //logger.LogInformation(bash.Command("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app").Output);
-
-                        }
-
-                    }
                 }
                 await Task.Delay(fiveSeconds, stoppingToken);
             }
+        }
+
+        private string RunCommand(string command)
+        {
+            BashResult result = bash.Command(command);
+            if (result.ErrorMsg.Length > 0)
+            {
+                throw new Exception(result.ErrorMsg);
+            }
+
+            return result.Output;
         }
     }
 }
