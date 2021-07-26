@@ -45,7 +45,7 @@ namespace dotnet_updater
                     else
                     {
                         Console.WriteLine("apply changes");
-                        Bash($"git pull -f {remoteBranch}");
+                        Bash($"git pull -f");
                     }
 
                 }
