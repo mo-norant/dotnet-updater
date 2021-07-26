@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Shell.NET;
 using Shell.NET.Util;
 using System;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,22 +36,38 @@ namespace dotnet_updater
                 if (IsCellular && CanUpdate)
                 {
 
-                    RunCommand($"git fetch {remote} {localBranch}");
+                    Bash($"git fetch {remote} {localBranch}");
+                    Bash("git rev-parse --abbrev-ref --symbolic-full-name @{u}");
 
                 }
                 await Task.Delay(fiveSeconds, stoppingToken);
             }
         }
 
-        private string RunCommand(string command)
-        {
-            BashResult result = bash.Command(command);
-            if (result.ErrorMsg.Length > 0)
-            {
-                throw new Exception(result.ErrorMsg);
-            }
 
-            return result.Output;
+
+        public string Bash(string cmd)
+        {
+            var escapedArgs = cmd.Replace("\"", "\\\"");
+
+            var process = new Process()
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    Arguments = $"-c \"{escapedArgs}\"",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                }
+            };
+
+            process.Start();
+            string result = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+
+            return result;
         }
+
     }
 }
