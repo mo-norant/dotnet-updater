@@ -46,7 +46,8 @@ namespace dotnet_updater
         private string RunCommand(string command)
         {
             BashResult result = bash.Command(command);
-            //mo
+            //mo change 2
+
             if (result.ErrorMsg.Length > 0)
             {
                 throw new Exception(result.ErrorMsg);
