@@ -29,23 +29,23 @@ namespace dotnet_updater
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                logger.LogInformation("Check new update at: {date}", DateTime.Now.ToString("dddd, dd MMMM yyyy HH: mm:ss"));
                 if (IsCellular && CanUpdate)
                 {
 
                     Bash($"git fetch  {remote} {localBranch}");
                     if (AnyBranchChanges())
                     {
-                        logger.LogInformation("No changes");
-                    }
-                    else
-                    {
                         logger.LogInformation("Changes detected. Applying changes...");
                         Bash($"git pull -f");
                         logger.LogInformation("Changes applied.");
                         RestartApplication();
                     }
+                    else
+                    {
+                        logger.LogInformation("No changes");
+                    }
                 }
+                logger.LogInformation("Check new update at: {date}", DateTime.Now.AddSeconds(updatePeriod).ToString("dddd, dd MMMM yyyy HH: mm:ss"));
                 await Task.Delay(updatePeriod, stoppingToken);
             }
         }
