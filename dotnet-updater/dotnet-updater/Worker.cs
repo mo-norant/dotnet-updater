@@ -48,15 +48,9 @@ namespace dotnet_updater
 
         public string Bash(string cmd)
         {
-<<<<<<< HEAD
             var escapedArgs = cmd.Replace("\"", "\\\"");
 
             var process = new Process()
-=======
-            BashResult result = bash.Command(command);
-            //mo
-            if (result.ErrorMsg.Length > 0)
->>>>>>> 587c2160e35d8dad056525940908ae3dd8051b1b
             {
                 StartInfo = new ProcessStartInfo
                 {
