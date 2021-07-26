@@ -1,9 +1,6 @@
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Shell.NET;
-using Shell.NET.Util;
-using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -14,16 +11,12 @@ namespace dotnet_updater
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> logger;
-
         private const bool IsCellular = true;
         private const bool CanUpdate = true;
-        private const int fiveSeconds = 1000 * 5;
-        private string latestCommit = "";
-
+        private const int updatePeriod = 1000 * 5;
         private const string localBranch = "main";
         private const string remoteBranch = "origin/main";
         private const string remote = "origin";
-        private Bash bash = new Bash();
 
         public Worker(ILogger<Worker> logger)
         {
@@ -38,28 +31,31 @@ namespace dotnet_updater
                 {
 
                     Bash($"git fetch  {remote} {localBranch}");
-                    if (!Bash($"git diff --name-only {localBranch} {remoteBranch}").Any())
+                    if (!AnyBranchChanges())
                     {
-                        Console.WriteLine("No changes");
+                        logger.LogInformation("No changes");
                     }
                     else
                     {
-                        Console.WriteLine("apply changes");
+                        logger.LogInformation("Changes detected. Applying changes...");
                         Bash($"git pull -f");
-                    }
+                        logger.LogInformation("Changes applied...");
+                        logger.LogInformation("restarting services...");
 
+                    }
                 }
-                await Task.Delay(fiveSeconds, stoppingToken);
+                await Task.Delay(updatePeriod, stoppingToken);
             }
         }
 
-
+        public bool AnyBranchChanges()
+        {
+            return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
+        }
 
         public string Bash(string cmd)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");
-            //mo change 3
-
             var process = new Process()
             {
                 StartInfo = new ProcessStartInfo
