@@ -5,6 +5,7 @@ using Shell.NET;
 using Shell.NET.Util;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,8 +37,15 @@ namespace dotnet_updater
                 if (IsCellular && CanUpdate)
                 {
 
-                    Bash($"git fetch {remote} {localBranch}");
-                    Bash("git rev-parse --abbrev-ref --symbolic-full-name @{u}");
+                    // Bash($"git fetch {remote} {localBranch}");
+                    if (!Bash($"git diff {localBranch} {remoteBranch}").Any())
+                    {
+                        Console.WriteLine("No changes");
+                    }
+                    else
+                    {
+                        Console.WriteLine(Bash($"git diff {localBranch} {remoteBranch}"));
+                    }
 
                 }
                 await Task.Delay(fiveSeconds, stoppingToken);
