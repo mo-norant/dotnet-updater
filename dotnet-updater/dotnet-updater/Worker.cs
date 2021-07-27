@@ -58,7 +58,7 @@ namespace dotnet_updater
 
         private void RestartApplication()
         {
-            logger.LogWarning("restart service");
+            logger.LogWarning("applying update script");
         }
 
         public string Bash(string cmd, bool UseShellExecute = false)
