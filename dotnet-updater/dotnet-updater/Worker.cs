@@ -36,7 +36,7 @@ namespace dotnet_updater
                     if (AnyBranchChanges())
                     {
                         logger.LogInformation("Changes detected. Applying changes...");
-                        Bash($"git pull -f");
+                        Bash($"git pull -f --stat");
                         logger.LogInformation("Changes applied.");
                         RestartApplication();
                     }
