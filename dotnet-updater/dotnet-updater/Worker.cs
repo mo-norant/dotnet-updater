@@ -59,15 +59,7 @@ namespace dotnet_updater
 
         private void RestartApplication()
         {
-            int.TryParse(Bash($"sudo lsof -t -i:{applicationPort}"), out int pid);
-            if (pid != 0)
-            {
-                logger.LogInformation("restarting services...");
-                logger.LogInformation("pid: {pid}", pid);
-                Bash($"sudo kill -9 {pid}");
-                Bash("dotnet run --project /home/mo/dotnet-updater/dotnet-updater/dotnet-update-app", true);
-                logger.LogInformation("Service restarted.");
-            }
+            logger.LogWarning("please restart services");
         }
 
         public string Bash(string cmd, bool UseShellExecute = false)
