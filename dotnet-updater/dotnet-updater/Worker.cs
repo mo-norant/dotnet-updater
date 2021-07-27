@@ -52,7 +52,9 @@ namespace dotnet_updater
 
         public bool AnyBranchChanges()
         {
-            return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
+            //return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
+            return Bash($"git diff  {localBranch} {remoteBranch}").Any();
+
         }
 
         private void RestartApplication()
