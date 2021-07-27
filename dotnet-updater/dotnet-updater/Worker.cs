@@ -58,8 +58,7 @@ namespace dotnet_updater
 
         private void RestartApplication()
         {
-            logger.LogWarning("applying update script");
-            logger.LogWarning(Bash("bash sudo /home/mo/dotnet-updater/dotnet-updater/dotnet-updater/restart_services.bash"));
+            logger.LogWarning("restart service");
         }
 
         public string Bash(string cmd, bool UseShellExecute = false)
