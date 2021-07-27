@@ -53,14 +53,13 @@ namespace dotnet_updater
 
         public bool AnyBranchChanges()
         {
-            //return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
-            return Bash($"git diff  {localBranch} {remoteBranch}").Any();
-
+            return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
         }
 
         private void RestartApplication()
         {
-            logger.LogWarning("please restart services");
+            logger.LogWarning("applying update script");
+            logger.LogWarning(Bash("bash /home/mo/dotnet-updater/dotnet-updater/dotnet-updater/restart_services.bash"));
         }
 
         public string Bash(string cmd, bool UseShellExecute = false)
