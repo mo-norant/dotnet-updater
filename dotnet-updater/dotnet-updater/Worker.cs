@@ -58,7 +58,7 @@ namespace dotnet_updater
 
         public long GetByteChangesBetweenLatestCommits()
         {
-            string bytes = Bash("bash ../../../git-file-size-diff.sh  HEAD..HEAD~1 | tail -1 | grep -o '[[:digit:]]*' ");
+            string bytes = Bash("bash ../../git-file-size-diff.sh  HEAD..HEAD~1 | tail -1 | grep -o '[[:digit:]]*' ");
             return long.Parse(bytes);
         }
 
