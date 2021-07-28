@@ -39,7 +39,7 @@ namespace dotnet_updater
                         string output = Bash($"git pull -f --stat");
                         logger.LogInformation(output);
                         logger.LogInformation("Changes applied.");
-                        RestartApplication();
+                        logger.LogInformation("There is {x}KB changed.", GetByteChangesBetweenLatestCommits() / 1000);
                     }
                     else
                     {
@@ -54,6 +54,12 @@ namespace dotnet_updater
         public bool AnyBranchChanges()
         {
             return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
+        }
+
+        public long GetByteChangesBetweenLatestCommits()
+        {
+            string bytes = Bash("bash ../../../git-file-size-diff.sh  HEAD..HEAD~1 | tail -1 | grep -o '[[:digit:]]*' ");
+            return long.Parse(bytes);
         }
 
         private void RestartApplication()
