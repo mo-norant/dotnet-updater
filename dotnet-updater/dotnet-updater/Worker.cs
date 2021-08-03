@@ -39,10 +39,9 @@ namespace dotnet_updater
                     if (AnyBranchChanges())
                     {
                         logger.LogInformation("Changes detected. Applying changes...");
-                        string output = Bash($"git pull -f --stat");
+                        string output = Bash($"git pull -s recursive -X -f --stat {configuration["UpstreamName"]} {configuration["ReleaseRepository"]} ");
                         logger.LogInformation(output);
                         logger.LogInformation("Changes applied.");
-                        logger.LogInformation("There is {x}KB changed.", GetByteChangesBetweenLatestCommits() / 1000);
                     }
                     else
                     {
@@ -60,12 +59,6 @@ namespace dotnet_updater
         public bool AnyBranchChanges()
         {
             return Bash($"git diff --name-only {configuration["ReleaseRepository"]} {configuration["UpstreamName"]}/{configuration["ReleaseRepository"]}").Any();
-        }
-
-        public long GetByteChangesBetweenLatestCommits()
-        {
-            string bytes = Bash("cd ../../ && bash git-file-size-diff.sh  HEAD..HEAD~1 | tail -1 | grep -o '[[:digit:]]*' ");
-            return long.Parse(bytes);
         }
 
         public string Bash(string cmd, bool UseShellExecute = false)
