@@ -22,8 +22,8 @@ namespace dotnet_updater
             this.logger = logger;
             this.configuration = configuration;
             interval = 1000 * configuration.GetValue("UpdateInterval", 60);
-            IsCellular = configuration.GetValue("CanUpdate", false);
-            CanUpdate = configuration.GetValue("IsCellular", false);
+            CanUpdate = configuration.GetValue("CanUpdate", false);
+            IsCellular = configuration.GetValue("IsCellular", false);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,7 +32,6 @@ namespace dotnet_updater
             {
                 if (IsCellular && CanUpdate)
                 {
-
                     Bash($"git fetch  {configuration["UpstreamName"]} {configuration["ReleaseRepository"]}");
                     if (AnyBranchChanges())
                     {
@@ -46,15 +45,9 @@ namespace dotnet_updater
                     {
                         logger.LogInformation("No changes");
                     }
-                }
-                
-                else if (!IsCellular)
-                {
-                    logger.LogWarning("Can't update trough cellular");
-                } else if(!CanUpdate)
-                {
-                    logger.LogWarning("Update is not allowed");
-                }
+                } 
+                else if (!IsCellular) logger.LogWarning("Can't update trough cellular");
+                else if (!CanUpdate) logger.LogWarning("Update is not allowed");
                 
                 logger.LogInformation("Check new update at: {date}", DateTime.Now.AddSeconds(interval).ToString("dddd, dd MMMM yyyy HH: mm:ss"));
                 await Task.Delay(interval, stoppingToken);
@@ -74,6 +67,7 @@ namespace dotnet_updater
 
         public string Bash(string cmd, bool UseShellExecute = false)
         {
+            return "";
             var escapedArgs = cmd.Replace("\"", "\\\"");
             var process = new Process()
             {
