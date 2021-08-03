@@ -1,4 +1,5 @@
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,17 +13,17 @@ namespace dotnet_updater
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> logger;
-        private const bool IsCellular = true;
-        private const bool CanUpdate = true;
-        private const int updatePeriod = 1000 * 5;
-        private const string localBranch = "main";
-        private const string remoteBranch = "origin/main";
-        private const string remote = "origin";
-        private const int applicationPort = 5001;
-
-        public Worker(ILogger<Worker> logger)
+        private readonly IConfiguration configuration;
+        private readonly bool IsCellular;
+        private readonly bool CanUpdate;
+        private readonly int interval;
+        public Worker(ILogger<Worker> logger, IConfiguration configuration)
         {
             this.logger = logger;
+            this.configuration = configuration;
+            interval = 1000 * configuration.GetValue("UpdateInterval", 60);
+            IsCellular = configuration.GetValue("CanUpdate", false);
+            CanUpdate = configuration.GetValue("IsCellular", false);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,7 +33,7 @@ namespace dotnet_updater
                 if (IsCellular && CanUpdate)
                 {
 
-                    Bash($"git fetch  {remote} {localBranch}");
+                    Bash($"git fetch  {configuration["UpstreamName"]} {configuration["ReleaseRepository"]}");
                     if (AnyBranchChanges())
                     {
                         logger.LogInformation("Changes detected. Applying changes...");
@@ -46,25 +47,29 @@ namespace dotnet_updater
                         logger.LogInformation("No changes");
                     }
                 }
-                logger.LogInformation("Check new update at: {date}", DateTime.Now.AddSeconds(updatePeriod).ToString("dddd, dd MMMM yyyy HH: mm:ss"));
-                await Task.Delay(updatePeriod, stoppingToken);
+                
+                else if (!IsCellular)
+                {
+                    logger.LogWarning("Can't update trough cellular");
+                } else if(!CanUpdate)
+                {
+                    logger.LogWarning("Update is not allowed");
+                }
+                
+                logger.LogInformation("Check new update at: {date}", DateTime.Now.AddSeconds(interval).ToString("dddd, dd MMMM yyyy HH: mm:ss"));
+                await Task.Delay(interval, stoppingToken);
             }
         }
 
         public bool AnyBranchChanges()
         {
-            return Bash($"git diff --name-only {localBranch} {remoteBranch}").Any();
+            return Bash($"git diff --name-only {configuration["ReleaseRepository"]} {configuration["UpstreamName"]}/{configuration["ReleaseRepository"]}").Any();
         }
 
         public long GetByteChangesBetweenLatestCommits()
         {
             string bytes = Bash("cd ../../ && bash git-file-size-diff.sh  HEAD..HEAD~1 | tail -1 | grep -o '[[:digit:]]*' ");
             return long.Parse(bytes);
-        }
-
-        private void RestartApplication()
-        {
-            logger.LogWarning("applying update script");
         }
 
         public string Bash(string cmd, bool UseShellExecute = false)
@@ -81,11 +86,9 @@ namespace dotnet_updater
                     CreateNoWindow = true,
                 }
             };
-
             process.Start();
             string result = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
-
             return result;
         }
 
