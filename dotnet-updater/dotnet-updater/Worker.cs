@@ -28,6 +28,9 @@ namespace dotnet_updater
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            logger.LogInformation("Check updates on {} branch", configuration["ReleaseRepository"]);
+            logger.LogInformation("Check for update every {}", interval);
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (IsCellular && CanUpdate)
