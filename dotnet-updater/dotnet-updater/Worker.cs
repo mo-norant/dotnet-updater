@@ -67,7 +67,6 @@ namespace dotnet_updater
 
         public string Bash(string cmd, bool UseShellExecute = false)
         {
-            return "";
             var escapedArgs = cmd.Replace("\"", "\\\"");
             var process = new Process()
             {
