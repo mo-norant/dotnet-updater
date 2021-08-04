@@ -8,7 +8,7 @@ namespace dotnet_updater_test_api
 {
     public class Startup
     {
-        const string version = "1.0.42";
+        const string version = "1.0.43";
 
         public Startup(IConfiguration configuration)
         {
