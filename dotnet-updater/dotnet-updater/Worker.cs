@@ -39,7 +39,7 @@ namespace dotnet_updater
                     if (AnyBranchChanges())
                     {
                         logger.LogInformation("Changes detected. Applying changes...");
-                        string output = Bash($"git pull -s recursive --stat {configuration["UpstreamName"]} {configuration["ReleaseRepository"]} ");
+                        string output = Bash($"git pull -f -s recursive --stat {configuration["UpstreamName"]} {configuration["ReleaseRepository"]} ");
                         logger.LogInformation(output);
                         logger.LogInformation("Changes applied.");
                     }
