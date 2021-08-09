@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-updater-test-api", "dotnet-updater-test-api\dotnet-updater-test-api.csproj", "{C48A2117-0506-4377-B0B5-B97D435BB507}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-service-1", "dotnet-updater-test-api\dotnet-service-1.csproj", "{C48A2117-0506-4377-B0B5-B97D435BB507}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-service-2", "dotnet-service-2\dotnet-service-2.csproj", "{5A789B8F-895A-4F27-A722-4AD00265882D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-service-3", "dotnet-service-3\dotnet-service-3.csproj", "{611896C2-6DB4-4808-AECA-B8B78EE97371}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{C48A2117-0506-4377-B0B5-B97D435BB507}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C48A2117-0506-4377-B0B5-B97D435BB507}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C48A2117-0506-4377-B0B5-B97D435BB507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A789B8F-895A-4F27-A722-4AD00265882D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A789B8F-895A-4F27-A722-4AD00265882D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A789B8F-895A-4F27-A722-4AD00265882D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A789B8F-895A-4F27-A722-4AD00265882D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{611896C2-6DB4-4808-AECA-B8B78EE97371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{611896C2-6DB4-4808-AECA-B8B78EE97371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{611896C2-6DB4-4808-AECA-B8B78EE97371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{611896C2-6DB4-4808-AECA-B8B78EE97371}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

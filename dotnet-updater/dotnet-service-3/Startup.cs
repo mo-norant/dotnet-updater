@@ -4,18 +4,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 
-namespace dotnet_updater_test_api
+namespace dotnet_service_3
 {
     public class Startup
     {
-        const string version = "service 1 | 1.0.61";
+        const string version = "service C | 1.0.0";
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            var t = JsonConvert.SerializeObject(configuration);
         }
 
         public IConfiguration Configuration { get; }
