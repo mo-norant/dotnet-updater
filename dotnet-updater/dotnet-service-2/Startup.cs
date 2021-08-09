@@ -9,7 +9,7 @@ namespace dotnet_service_2
 {
     public class Startup
     {
-        const string version = "service B | 1.0.1";
+        const string version = "service B | 1.0.3";
 
         public Startup(IConfiguration configuration)
         {
